@@ -23,23 +23,22 @@ const articleSchema = {
 
 const Article = mongoose.model("Article", articleSchema);
 
+app.route("/articles")
+
 //GET all
-app.get("/articles", function(req,res){
+.get(function(req,res){
     Article.find(function(err, foundArticles){
         if(!err){
             res.send(foundArticles);
         } else {
             res.send(err);
-        }
-        
-    })
+        }     
+    });
 })
 
-//POST
-app.post("/articles", function(req, res){
-    console.log();
-    console.log();
 
+//POST
+.post(function(req, res){
     const newArticle = Article({
         title: req.body.title,
         content: req.body.content
@@ -55,7 +54,7 @@ app.post("/articles", function(req, res){
 })
 
 //DELETE All
-app.delete("/articles", function(req, res){
+.delete(function(req, res){
     Article.deleteMany(function(err){
       if (!err){
         res.send("Successfully deleted all the articles in wikiDB.");
@@ -63,7 +62,7 @@ app.delete("/articles", function(req, res){
         res.send(err);
       }
     });
-  });
+  })
 
 
 
