@@ -23,6 +23,10 @@ const articleSchema = {
 
 const Article = mongoose.model("Article", articleSchema);
 
+
+/////////////////////////All Articles///////////////////////////////////
+
+
 app.route("/articles")
 
 //GET all
@@ -62,7 +66,69 @@ app.route("/articles")
         res.send(err);
       }
     });
-  })
+  });
+
+
+/////////////////////////Individual Articles///////////////////////////////////
+
+
+app.route("/articles/:articleTitle")
+
+.get(function(req, res){
+  const articleTitle = req.params.articleTitle;
+  Article.findOne({title: articleTitle}, function(err, article){
+    if (article){
+      const jsonArticle = JSON.stringify(article);
+      res.send(jsonArticle);
+    } else {
+      res.send("No article with that title found.");
+    }
+  });
+})
+
+.patch(function(req, res){
+  const articleTitle = req.params.articleTitle;
+  Article.update(
+    {title: articleTitle},
+    {content: req.body.newContent},
+    function(err){
+      if (!err){
+        res.send("Successfully updated selected article.");
+      } else {
+        res.send(err);
+      }
+    });
+})
+
+.put(function(req, res){
+
+  const articleTitle = req.params.articleTitle;
+
+  Article.update(
+    {title: articleTitle},
+    {content: req.body.newContent},
+    {overwrite: true},
+    function(err){
+      if (!err){
+        res.send("Successfully updated the content of the selected article.");
+      } else {
+        res.send(err);
+      }
+    });
+})
+
+
+.delete(function(req, res){
+  const articleTitle = req.params.articleTitle;
+  LostPet.findOneAndDelete({title: articleTitle}, function(err){
+    if (!err){
+      res.send("Successfully deleted selected article.");
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 
 
 
